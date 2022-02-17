@@ -1,0 +1,123 @@
+//main.dart
+import"package:flutter/material.dart";
+ 
+import'home.dart';
+voidmain() =>runApp(MyApp());
+classMyAppextendsStatelessWidget {
+  @override
+  Widgetbuild(BuildContextcontext) {
+    returnMaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: HomePage(), //This is where we specify our homepage
+    );
+  }
+}
+
+//home.dart
+import'package:flutter/material.dart';
+import'package:charts_flutter/flutter.dart'ascharts;
+import'/developer_series.dart';
+import'/developer_chart.dart';
+ 
+classHomePageextendsStatelessWidget {
+  finalList<DeveloperSeries>data = [
+ 
+    DeveloperSeries(
+      year: "2017",
+      developers: 40000,
+      barColor: charts.ColorUtil.fromDartColor(Colors.green),
+    ),
+    DeveloperSeries(
+      year: "2018",
+      developers: 5000,
+      barColor: charts.ColorUtil.fromDartColor(Colors.green),
+    ),
+    DeveloperSeries(
+      year: "2019",
+      developers: 40000,
+      barColor: charts.ColorUtil.fromDartColor(Colors.green),
+    ),
+    DeveloperSeries(
+      year: "2020",
+      developers: 35000,
+      barColor: charts.ColorUtil.fromDartColor(Colors.green),
+    ),
+    DeveloperSeries(
+      year: "2021",
+      developers: 45000,
+      barColor: charts.ColorUtil.fromDartColor(Colors.green),
+    ),
+  ];
+ 
+  @override
+  Widgetbuild(BuildContextcontext) {
+    returnScaffold(
+      body: Center(
+        child: DeveloperChart(data: data,),
+      ),
+    );
+  }
+}
+
+//developers_series.dart
+import'package:charts_flutter/flutter.dart'ascharts;
+import'package:flutter/foundation.dart';
+ 
+classDeveloperSeries {
+  finalStringyear;
+  finalintdevelopers;
+  finalcharts.ColorbarColor;
+ 
+  DeveloperSeries(
+    {
+      requiredthis.year,
+      requiredthis.developers,
+      requiredthis.barColor
+    }
+  );
+}
+
+//developers_chart.dart
+import'package:flutter/material.dart';
+import'package:charts_flutter/flutter.dart'ascharts;
+import'/developer_series.dart';
+ 
+classDeveloperChartextendsStatelessWidget {
+  finalList<DeveloperSeries>data;
+ 
+  DeveloperChart({requiredthis.data});
+  @override
+  Widgetbuild(BuildContextcontext) {
+    List<charts.Series<DeveloperSeries, String>>series = [
+      charts.Series(
+        id: "developers",
+        data: data,
+        domainFn: (DeveloperSeriesseries, _) =>series.year,
+        measureFn: (DeveloperSeriesseries, _) =>series.developers,
+        colorFn: (DeveloperSeriesseries, _) =>series.barColor
+      )
+    ];
+ 
+   returnContainer(
+      height: 300,
+      padding: EdgeInsets.all(25),
+      child: Card(
+        child: Padding(
+          padding: constEdgeInsets.all(9.0),
+          child: Column(
+            children: <Widget>[
+              Text(
+                "Yearly Growth in the Flutter Community",
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              Expanded(
+                child: charts.BarChart(series, animate: true),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
